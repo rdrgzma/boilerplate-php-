@@ -9,6 +9,7 @@ class Auth
         // Salva os dados básicos do usuário na sessão
         $_SESSION['user'] = [
             'id' => $user['id'],
+            'company_id' => $user['company_id'] ?? null,
             'name' => $user['name'],
             'email' => $user['email']
         ];

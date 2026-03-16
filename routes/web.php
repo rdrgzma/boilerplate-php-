@@ -15,3 +15,9 @@ $router->get('/logout', [AuthController::class, 'logout']);
 
 // Rotas da Área Administrativa
 $router->get('/admin/dashboard', [DashboardController::class, 'index']);
+$router->get('/admin/demo', [DashboardController::class, 'demo']);
+
+// Auto-discovery de Rotas dos Módulos (modules/*/routes.php)
+foreach (glob(__DIR__ . '/../modules/*/routes.php') as $moduleRoutes) {
+    require $moduleRoutes;
+}
