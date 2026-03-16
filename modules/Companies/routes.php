@@ -5,3 +5,4 @@ use Modules\Companies\Controllers\CompanyController;
 
 $router->get('/admin/companies', [CompanyController::class, 'index']);
 $router->get('/admin/companies/create', [CompanyController::class, 'create']);
+$router->post('/admin/companies/store', [CompanyController::class, 'store']);

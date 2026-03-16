@@ -33,4 +33,24 @@ class SettingController extends Controller
             'formFields' => $formFields
         ], 'layouts/admin');
     }
+
+    public function save()
+    {
+        Auth::requireLogin();
+        $companyId = $_SESSION['user']['company_id'] ?? 1;
+
+        foreach ($_POST as $key => $value) {
+            // Find existing setting or create new
+            $pdo = \Core\Database::getConnection();
+            $stmt = $pdo->prepare("INSERT OR REPLACE INTO settings (company_id, key, value, updated_at) VALUES (:company_id, :key, :value, CURRENT_TIMESTAMP)");
+            $stmt->execute([
+                'company_id' => $companyId,
+                'key' => $key,
+                'value' => $value
+            ]);
+        }
+        
+        header('Location: /admin/settings?success=1');
+        exit;
+    }
 }

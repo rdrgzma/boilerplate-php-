@@ -52,4 +52,21 @@ class ServiceOrderController extends Controller
         $clients = Client::all();
         $this->render('ServiceOrders/views/create', ['clients' => $clients], 'layouts/admin');
     }
+
+    public function store()
+    {
+        Auth::requireLogin();
+        
+        $order = new ServiceOrder();
+        $order->company_id = $_SESSION['user']['company_id'] ?? 1;
+        $order->client_id = (int)$_POST['client_id'];
+        $order->description = $_POST['description'];
+        $order->technician = $_POST['technician'] ?? null;
+        $order->status = $_POST['status'] ?? 'pending';
+        $order->notes = $_POST['notes'] ?? null;
+        $order->save();
+
+        header('Location: /admin/service-orders');
+        exit;
+    }
 }

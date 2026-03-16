@@ -24,6 +24,7 @@
         <?php 
             $title = "General Configuration";
             $submitText = "Save Organization Settings";
+            $formAction = "/admin/settings/save";
             $fields = $formFields;
             include __DIR__ . '/../../../app/Views/components/form.php'; 
         ?>

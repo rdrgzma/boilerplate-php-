@@ -50,8 +50,8 @@ class SalesController extends Controller
 
         $sale = new Sale();
         $sale->company_id = $companyId;
-        $sale->client_id = $data['client_id'];
-        $sale->total_amount = $data['total_amount'] ?? 0;
+        $sale->client_id = (int)$data['client_id'];
+        $sale->total_amount = (float)($data['total_amount'] ?? 0);
         $sale->status = 'completed';
         $sale->save();
 
@@ -59,10 +59,10 @@ class SalesController extends Controller
             foreach ($data['items'] as $item) {
                 $saleItem = new SaleItem();
                 $saleItem->sale_id = $sale->id;
-                $saleItem->product_id = $item['product_id'];
-                $saleItem->quantity = $item['quantity'];
-                $saleItem->unit_price = $item['price'];
-                $saleItem->subtotal = $item['quantity'] * $item['price'];
+                $saleItem->product_id = (int)$item['product_id'];
+                $saleItem->quantity = (float)$item['quantity'];
+                $saleItem->unit_price = (float)$item['price'];
+                $saleItem->subtotal = (float)$item['quantity'] * (float)$item['price'];
                 $saleItem->save();
             }
         }

@@ -45,4 +45,22 @@ class FinanceController extends Controller
         Auth::requireLogin();
         $this->render('Finance/views/create', [], 'layouts/admin');
     }
+
+    public function store()
+    {
+        Auth::requireLogin();
+        
+        $transaction = new Transaction();
+        $transaction->company_id = $_SESSION['user']['company_id'] ?? 1;
+        $transaction->description = $_POST['description'];
+        $transaction->type = $_POST['type'];
+        $transaction->amount = (float)$_POST['amount'];
+        $transaction->category = $_POST['category'];
+        $transaction->date = $_POST['date'] ?? date('Y-m-d');
+        $transaction->status = 'paid';
+        $transaction->save();
+
+        header('Location: /admin/finance');
+        exit;
+    }
 }

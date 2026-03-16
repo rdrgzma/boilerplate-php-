@@ -46,6 +46,60 @@ abstract class Model
     }
 
     /**
+     * Salva ou atualiza o registro no banco de dados.
+     */
+    public function save(): bool
+    {
+        $pdo = Database::getConnection();
+        $data = $this->toArray();
+        
+        // Remove o ID do array de dados para a query se estiver presente
+        $id = $this->id ?? null;
+        if (isset($data['id'])) unset($data['id']);
+
+        if ($id) {
+            // UPDATE
+            $fields = [];
+            foreach (array_keys($data) as $key) {
+                $fields[] = "{$key} = :{$key}";
+            }
+            $sql = "UPDATE " . static::$table . " SET " . implode(', ', $fields) . " WHERE id = :id";
+            $data['id'] = $id;
+        } else {
+            // INSERT
+            if (empty($this->created_at)) {
+                $this->created_at = date('Y-m-d H:i:s');
+                $data['created_at'] = $this->created_at;
+            }
+            if (empty($this->updated_at)) {
+                $this->updated_at = date('Y-m-d H:i:s');
+                $data['updated_at'] = $this->updated_at;
+            }
+
+            $keys = array_keys($data);
+            $tags = array_map(fn($k) => ":$k", $keys);
+            $sql = "INSERT INTO " . static::$table . " (" . implode(', ', $keys) . ") VALUES (" . implode(', ', $tags) . ")";
+        }
+
+        $stmt = $pdo->prepare($sql);
+        $success = $stmt->execute($data);
+
+        if ($success && !$id) {
+            $this->id = (int)$pdo->lastInsertId();
+        }
+
+        return $success;
+    }
+
+    /**
+     * Converte o objeto em um array de dados correspondentes às colunas do banco.
+     */
+    public function toArray(): array
+    {
+        return get_object_vars($this);
+    }
+
+    /**
      * Define se o model deve ser filtrado por company_id.
      * Sobrescreva nos models que NÃO devem ser filtrados.
      */

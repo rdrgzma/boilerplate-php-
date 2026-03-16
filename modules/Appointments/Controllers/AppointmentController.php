@@ -43,4 +43,21 @@ class AppointmentController extends Controller
         $clients = Client::all();
         $this->render('Appointments/views/create', ['clients' => $clients], 'layouts/admin');
     }
+
+    public function store()
+    {
+        Auth::requireLogin();
+        
+        $appointment = new Appointment();
+        $appointment->company_id = $_SESSION['user']['company_id'] ?? 1;
+        $appointment->client_id = (int)$_POST['client_id'];
+        $appointment->date = $_POST['date'];
+        $appointment->time = $_POST['time'];
+        $appointment->notes = $_POST['notes'] ?? null;
+        $appointment->status = 'scheduled';
+        $appointment->save();
+
+        header('Location: /admin/appointments');
+        exit;
+    }
 }

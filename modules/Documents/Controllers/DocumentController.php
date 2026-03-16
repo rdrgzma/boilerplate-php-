@@ -49,4 +49,21 @@ class DocumentController extends Controller
         $clients = Client::all();
         $this->render('Documents/views/create', ['clients' => $clients], 'layouts/admin');
     }
+
+    public function store()
+    {
+        Auth::requireLogin();
+        
+        $document = new Document();
+        $document->company_id = $_SESSION['user']['company_id'] ?? 1;
+        $document->client_id = $_POST['client_id'];
+        $document->filename = $_POST['filename']; // In a real app, this would be from $_FILES
+        $document->file_path = 'uploads/' . $_POST['filename'];
+        $document->file_size = (int)($_POST['file_size'] ?? 0);
+        $document->category = $_POST['category'] ?? 'General';
+        $document->save();
+
+        header('Location: /admin/documents');
+        exit;
+    }
 }

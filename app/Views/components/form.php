@@ -10,7 +10,7 @@
         <h3 class="text-xl font-bold text-slate-900 mb-6"><?= $title ?></h3>
     <?php endif; ?>
 
-    <form action="#" method="POST" class="space-y-5">
+    <form action="<?= $formAction ?? '#' ?>" method="POST" class="space-y-5">
         <?php foreach ($fields as $field): ?>
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1.5"><?= $field['label'] ?></label>

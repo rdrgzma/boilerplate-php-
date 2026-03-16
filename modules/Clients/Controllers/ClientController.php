@@ -42,4 +42,21 @@ class ClientController extends Controller
         Auth::requireLogin();
         $this->render('Clients/views/create', [], 'layouts/admin');
     }
+
+    public function store()
+    {
+        Auth::requireLogin();
+        
+        $client = new Client();
+        $client->company_id = $_SESSION['user']['company_id'] ?? 1;
+        $client->name = $_POST['name'];
+        $client->email = $_POST['email'];
+        $client->phone = $_POST['phone'] ?? null;
+        $client->company_name = $_POST['company_name'] ?? null;
+        $client->status = 'active';
+        $client->save();
+
+        header('Location: /admin/clients');
+        exit;
+    }
 }

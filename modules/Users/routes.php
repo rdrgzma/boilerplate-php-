@@ -5,3 +5,4 @@ use Modules\Users\Controllers\UserController;
 
 $router->get('/admin/users', [UserController::class, 'index']);
 $router->get('/admin/users/create', [UserController::class, 'create']);
+$router->post('/admin/users/store', [UserController::class, 'store']);

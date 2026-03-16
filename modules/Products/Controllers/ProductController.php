@@ -41,6 +41,23 @@ class ProductController extends Controller
         Auth::requireLogin();
         $this->render('Products/views/create', [], 'layouts/admin');
     }
+
+    public function store()
+    {
+        Auth::requireLogin();
+        
+        $product = new Product();
+        $product->company_id = $_SESSION['user']['company_id'] ?? 1;
+        $product->name = $_POST['name'];
+        $product->price = (float)$_POST['price'];
+        $product->category = $_POST['category'];
+        $product->description = $_POST['description'] ?? null;
+        $product->status = 'active';
+        $product->save();
+
+        header('Location: /admin/products');
+        exit;
+    }
 }
 
 function number_class($val, $prec) {

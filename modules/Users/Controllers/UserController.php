@@ -41,4 +41,21 @@ class UserController extends Controller
         Auth::requireLogin();
         $this->render('Users/views/create', [], 'layouts/admin');
     }
+
+    public function store()
+    {
+        Auth::requireLogin();
+        
+        $user = new User();
+        $user->company_id = $_SESSION['user']['company_id'] ?? 1;
+        $user->name = $_POST['name'];
+        $user->email = $_POST['email'];
+        $user->password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $user->role = $_POST['role'] ?? 'user';
+        $user->status = 'active';
+        $user->save();
+
+        header('Location: /admin/users');
+        exit;
+    }
 }

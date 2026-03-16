@@ -41,4 +41,18 @@ class CompanyController extends Controller
         Auth::requireLogin();
         $this->render('Companies/views/create', [], 'layouts/admin');
     }
+
+    public function store()
+    {
+        Auth::requireLogin();
+        
+        $company = new Company();
+        $company->name = $_POST['name'];
+        $company->domain = $_POST['domain'];
+        $company->status = $_POST['status'] ?? 'active';
+        $company->save();
+
+        header('Location: /admin/companies');
+        exit;
+    }
 }
