@@ -14,15 +14,14 @@ try {
     echo "Instância do PaymentService criada com sucesso ($gateway).\n";
 
     // Simulação do uso (sem executar a chamada real se a API Key for inválida)
-    /*
+    
     $response = $service->criarPagamento([
         'customer' => 'cus_123',
         'value' => 100,
         'billingType' => 'PIX'
     ]);
     print_r($response);
-    */
-
+    
     echo "Estrutura verificada com sucesso.\n";
 
 } catch (Exception $e) {
