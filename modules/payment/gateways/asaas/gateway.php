@@ -1,0 +1,31 @@
+<?php
+
+require_once __DIR__ . '/client.php';
+
+class AsaasGateway {
+    private $client;
+
+    public function __construct() {
+        $this->client = new AsaasClient();
+    }
+
+    public function createCustomer($data) {
+        return $this->client->post('/customers', $data);
+    }
+
+    public function createPayment($data) {
+        return $this->client->post('/payments', $data);
+    }
+
+    public function getPayment($id) {
+        return $this->client->get('/payments/' . $id);
+    }
+
+    public function refund($id) {
+        return $this->client->post('/payments/' . $id . '/refund');
+    }
+
+    public function createInvoice($paymentId) {
+        return $this->client->post('/invoices', ['paymentId' => $paymentId]);
+    }
+}
