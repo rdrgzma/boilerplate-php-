@@ -1,31 +1,33 @@
 <?php
-
-// Script de teste do módulo de pagamentos
-// Este script verifica se as classes podem ser carregadas e o factory funciona corretamente.
-
 require_once __DIR__ . '/modules/payment/payment_service.php';
+require_once __DIR__ . '/modules/payment/customer_service.php';
 
-echo "--- Início do Teste do Módulo de Pagamento ---\n";
+$gateway = 'asaas';
 
 try {
-    $gateway = 'asaas';
-    $service = new PaymentService($gateway);
-    
-    echo "Instância do PaymentService criada com sucesso ($gateway).\n";
+    $customerService = new CustomerService($gateway);
 
-    // Simulação do uso (sem executar a chamada real se a API Key for inválida)
-    
-    $response = $service->criarPagamento([
-        'customer' => 'cus_123',
-        'value' => 100,
-        'billingType' => 'PIX'
+    $customer = $customerService->criarCliente([
+        'name' => 'Cliente Teste',
+        'cpfCnpj' => '11144477735', // CPF de teste válido
+        'email' => 'teste@email.com'
     ]);
-    print_r($response);
-    
-    echo "Estrutura verificada com sucesso.\n";
+
+    echo "Cliente criado:\n";
+    print_r($customer);
+
+    $paymentService = new PaymentService($gateway);
+
+    $payment = $paymentService->criarPagamento([
+        'customer' => $customer['id'],
+        'value' => 100,
+        'billingType' => 'PIX',
+        'description' => 'Teste PIX'
+    ]);
+
+    echo "Pagamento criado:\n";
+    print_r($payment);
 
 } catch (Exception $e) {
     echo "ERRO: " . $e->getMessage() . "\n";
 }
-
-echo "--- Fim do Teste ---\n";

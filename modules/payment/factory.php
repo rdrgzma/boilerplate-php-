@@ -1,25 +1,23 @@
 <?php
 
 require_once __DIR__ . '/gateways/asaas/gateway.php';
+// require_once __DIR__ . '/gateways/mercadopago/gateway.php';
+// require_once __DIR__ . '/gateways/pagseguro/gateway.php';
 
-class PaymentGatewayFactory {
-    public static function create($gatewayName = null) {
-        if ($gatewayName === null) {
-            $config = require __DIR__ . '/../../config/payment.php';
-            $gatewayName = $config['default_gateway'];
-        }
+class GatewayFactory {
 
+    public static function make($gatewayName) {
         switch (strtolower($gatewayName)) {
             case 'asaas':
                 return new AsaasGateway();
             case 'mercadopago':
                 // return new MercadoPagoGateway();
-                throw new Exception("Mercado Pago gateway not implemented yet.");
+                throw new Exception("Mercado Pago ainda não implementado");
             case 'pagseguro':
                 // return new PagSeguroGateway();
-                throw new Exception("PagSeguro gateway not implemented yet.");
+                throw new Exception("PagSeguro ainda não implementado");
             default:
-                throw new Exception("Gateway $gatewayName not supported.");
+                throw new Exception("Gateway {$gatewayName} não encontrado");
         }
     }
 }
